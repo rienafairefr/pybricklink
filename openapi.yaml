@@ -1,0 +1,48 @@
+openapi: 3.0.1
+info:
+  title: Bricklink REST API
+  description: 'Bricklink REST API'
+  version: 1.0.0
+servers:
+- url: https://api.bricklink.com/api/store/v1
+tags:
+- name: catalog
+components:
+  schemas:
+    ItemData:
+      type: object
+  securitySchemes:
+    Oauth:
+      type: apiKey
+      in: header
+      name: Oauth1
+      bearerFormat: Oauth
+      description: Oauth1 security
+security:
+  - Oauth
+paths:
+  /items/{type}/no:
+    get:
+      tags:
+        - catalog
+      parameters:
+        - name: type
+          in: path
+          schema:
+            type: string
+            enum: [ MINIFIG, PART, SET, BOOK, GEAR, CATALOG, INSTRUCTION, UNSORTED_LOT, ORIGINAL_BOX ]
+          description: The type of the item to get.
+          required: true
+        - name: no
+          in: path
+          schema:
+            type: string
+          description: Identification number of the item
+          required: true
+      responses:
+        200:
+          description: "item data"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemData'
